@@ -1,0 +1,21 @@
+{
+  "name": "song-of-the-day",
+  "version": "1.0.0",
+  "main": "index.js",
+  "bin": {
+    "song-of-the-day": "./index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "commander": "^14.0.0",
+    "dotenv": "^17.1.0",
+    "spotify-web-api-node": "^5.0.2"
+  }
+}
