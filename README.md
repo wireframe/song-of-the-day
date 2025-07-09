@@ -75,3 +75,69 @@ Tokens are automatically refreshed when they expire.
 - `song-selector.js` - Random selection with history tracking
 - `.spotify-tokens.json` - Stored authentication tokens (created automatically)
 - `.song-history.json` - Song selection history (created automatically)
+
+## Roadmap
+
+### 🔥 High Priority
+1. **Smart Selection Algorithms**
+   - Weight by play count, recently added, or user preferences
+   - Mood-based selection (happy, sad, energetic)
+   - Genre-based filtering and selection
+
+2. **Enhanced History Management**
+   - View detailed history with dates and ratings
+   - Export history to CSV/JSON
+   - Configure history size limits
+
+3. **Improved Error Handling**
+   - Better messaging for empty libraries
+   - Retry logic for API failures
+   - Offline mode with cached data
+
+### 🚀 Medium Priority
+4. **User Preferences & Configuration**
+   - Save preferred genres, artists, or time periods
+   - Configure selection criteria (exclude explicit, minimum popularity)
+   - Custom weight settings for different sources
+
+5. **Social Features**
+   - Share today's song on social media
+   - Export song details with album artwork
+   - Create shareable song cards
+
+6. **Scheduling & Automation**
+   - Cron job integration for daily selection
+   - System notifications for new songs
+   - Integration with calendar apps
+
+### 💡 Low Priority
+7. **Advanced Analytics**
+   - Track listening patterns over time
+   - Most played artists/genres statistics
+   - Discover music trends in your library
+
+8. **Multiple Selection Modes**
+   - Song of the week/month
+   - Themed selections (throwback Thursday, new music Friday)
+   - Playlist generation from history
+
+9. **Integration Features**
+   - Last.fm scrobbling integration
+   - Apple Music/YouTube Music support
+   - Discord bot integration
+
+10. **Performance Optimizations**
+    - Cache song metadata locally
+    - Incremental library updates
+    - Faster startup times
+
+### 🎯 Future Ideas
+11. **Machine Learning**
+    - Predict songs you'll like based on history
+    - Seasonal recommendations
+    - Time-of-day appropriate selections
+
+12. **Web Interface**
+    - Simple web dashboard
+    - Mobile-responsive design
+    - Real-time updates
