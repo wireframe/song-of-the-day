@@ -71,6 +71,23 @@ async function clearHistory() {
   }
 }
 
+async function logout() {
+  try {
+    const fs = require('fs');
+    const path = require('path');
+    const tokenFile = path.join(__dirname, '.spotify-tokens.json');
+    
+    if (fs.existsSync(tokenFile)) {
+      fs.unlinkSync(tokenFile);
+      console.log('✅ Logged out successfully - tokens removed');
+    } else {
+      console.log('ℹ️ No active session found');
+    }
+  } catch (error) {
+    console.error('❌ Error:', error.message);
+  }
+}
+
 program
   .name('song-of-the-day')
   .description('CLI tool to select a random song of the day from your Spotify library')
@@ -90,6 +107,11 @@ program
   .command('clear-history')
   .description('Clear song history')
   .action(clearHistory);
+
+program
+  .command('logout')
+  .description('Logout and remove stored authentication tokens')
+  .action(logout);
 
 program.parse();
 

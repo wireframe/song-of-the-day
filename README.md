@@ -12,7 +12,7 @@ A command line application that selects a random song of the day from your Spoti
 2. **Create Spotify App:**
    - Go to [Spotify Developer Dashboard](https://developer.spotify.com/dashboard)
    - Create a new app
-   - Add `http://localhost:8888/callback` as a redirect URI
+   - Add `http://127.0.0.1:3000/callback` as a redirect URI
 
 3. **Configure environment:**
    ```bash

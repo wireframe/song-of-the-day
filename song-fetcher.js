@@ -7,13 +7,19 @@ class SongFetcher {
     try {
       const songs = [];
       
+      console.log('🔍 Fetching saved tracks...');
       const savedTracks = await this.getSavedTracks();
+      console.log(`📱 Found ${savedTracks.length} saved tracks`);
       songs.push(...savedTracks);
       
+      console.log('🔍 Fetching playlist tracks...');
       const playlistTracks = await this.getPlaylistTracks();
+      console.log(`📝 Found ${playlistTracks.length} playlist tracks`);
       songs.push(...playlistTracks);
       
-      return this.removeDuplicates(songs);
+      const uniqueSongs = this.removeDuplicates(songs);
+      console.log(`🎵 Total unique songs: ${uniqueSongs.length}`);
+      return uniqueSongs;
     } catch (error) {
       console.error('Error fetching songs:', error.message);
       return [];
@@ -35,7 +41,7 @@ class SongFetcher {
         if (response.body.items.length === 0) break;
         
         response.body.items.forEach(item => {
-          if (item.track && item.track.preview_url) {
+          if (item.track) {
             tracks.push({
               id: item.track.id,
               name: item.track.name,
@@ -92,7 +98,7 @@ class SongFetcher {
         if (response.body.items.length === 0) break;
         
         response.body.items.forEach(item => {
-          if (item.track && item.track.preview_url) {
+          if (item.track) {
             tracks.push({
               id: item.track.id,
               name: item.track.name,
