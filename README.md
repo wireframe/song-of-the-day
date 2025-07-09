@@ -22,7 +22,7 @@ A command line application that selects a random song of the day from your Spoti
    ```
    SPOTIFY_CLIENT_ID=your_client_id
    SPOTIFY_CLIENT_SECRET=your_client_secret
-   SPOTIFY_REDIRECT_URI=http://localhost:8888/callback
+   SPOTIFY_REDIRECT_URI=http://127.0.0.1:3000/callback
    ```
 
 ## Usage
