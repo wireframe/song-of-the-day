@@ -4,24 +4,39 @@ const http = require('http');
 const url = require('url');
 const fs = require('fs');
 const path = require('path');
+const CONFIG = require('./config');
+const { AuthenticationError, TokenExpiredError, ConfigurationError } = require('./errors');
 
 class SpotifyAuth {
   constructor() {
+    this.validateConfig();
     this.spotifyApi = new SpotifyWebApi({
       clientId: process.env.SPOTIFY_CLIENT_ID,
       clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
       redirectUri: process.env.SPOTIFY_REDIRECT_URI
     });
     
-    this.tokenFile = path.join(__dirname, '.spotify-tokens.json');
+    this.tokenFile = path.join(__dirname, CONFIG.TOKEN_FILE);
+  }
+
+  validateConfig() {
+    const required = ['SPOTIFY_CLIENT_ID', 'SPOTIFY_CLIENT_SECRET', 'SPOTIFY_REDIRECT_URI'];
+    const missing = required.filter(key => !process.env[key]);
+    if (missing.length > 0) {
+      throw new ConfigurationError(`Missing required environment variables: ${missing.join(', ')}`);
+    }
   }
 
   async authenticate() {
-    if (this.loadTokens()) {
-      return this.spotifyApi;
+    try {
+      if (this.loadTokens()) {
+        return this.spotifyApi;
+      }
+      
+      return this.performAuthFlow();
+    } catch (error) {
+      throw new AuthenticationError(`Authentication failed: ${error.message}`);
     }
-    
-    return this.performAuthFlow();
   }
 
   loadTokens() {
@@ -56,7 +71,18 @@ class SpotifyAuth {
       this.spotifyApi.setAccessToken(tokens.access_token);
       return true;
     } catch (error) {
-      console.error('Error refreshing tokens:', error.message);
+      throw new TokenExpiredError(`Failed to refresh access token: ${error.message}`);
+    }
+  }
+
+  async handleTokenRefresh() {
+    console.log('🔄 Token expired, attempting refresh...');
+    try {
+      await this.refreshTokens();
+      console.log('✅ Token refreshed successfully');
+      return true;
+    } catch (error) {
+      console.error('❌ Token refresh failed:', error.message);
       return false;
     }
   }
@@ -97,13 +123,13 @@ class SpotifyAuth {
             res.writeHead(400, { 'Content-Type': 'text/html' });
             res.end('<h1>Authentication failed!</h1>');
             server.close();
-            reject(error);
+            reject(new AuthenticationError(`Authorization failed: ${error.message}`));
           }
         } else if (query.error) {
           res.writeHead(400, { 'Content-Type': 'text/html' });
           res.end('<h1>Authentication cancelled!</h1>');
           server.close();
-          reject(new Error('Authentication cancelled'));
+          reject(new AuthenticationError('Authentication cancelled by user'));
         }
       });
       

@@ -5,6 +5,7 @@ const { program } = require('commander');
 const SpotifyAuth = require('./spotify-auth');
 const SongFetcher = require('./song-fetcher');
 const SongSelector = require('./song-selector');
+const { SpotifyError, ConfigurationError } = require('./errors');
 
 async function selectSongOfTheDay() {
   try {
@@ -15,7 +16,7 @@ async function selectSongOfTheDay() {
     
     console.log('✅ Authenticated with Spotify');
     
-    const fetcher = new SongFetcher(spotifyApi);
+    const fetcher = new SongFetcher(spotifyApi, auth);
     console.log('📦 Fetching your music library...');
     
     const songs = await fetcher.getAllSongs();
@@ -42,7 +43,14 @@ async function selectSongOfTheDay() {
     }
     
   } catch (error) {
-    console.error('❌ Error:', error.message);
+    if (error instanceof ConfigurationError) {
+      console.error('❌ Configuration Error:', error.message);
+      console.error('Please check your environment variables (.env file)');
+    } else if (error instanceof SpotifyError) {
+      console.error('❌ Spotify Error:', error.message);
+    } else {
+      console.error('❌ Error:', error.message);
+    }
     process.exit(1);
   }
 }
@@ -57,7 +65,11 @@ async function showHistory() {
     console.log(`Last 10 played: ${stats.lastPlayed.length} songs`);
     
   } catch (error) {
-    console.error('❌ Error:', error.message);
+    if (error instanceof SpotifyError) {
+      console.error('❌ Spotify Error:', error.message);
+    } else {
+      console.error('❌ Error:', error.message);
+    }
   }
 }
 
@@ -67,7 +79,11 @@ async function clearHistory() {
     selector.clearHistory();
     console.log('✅ Song history cleared');
   } catch (error) {
-    console.error('❌ Error:', error.message);
+    if (error instanceof SpotifyError) {
+      console.error('❌ Spotify Error:', error.message);
+    } else {
+      console.error('❌ Error:', error.message);
+    }
   }
 }
 
@@ -75,7 +91,8 @@ async function logout() {
   try {
     const fs = require('fs');
     const path = require('path');
-    const tokenFile = path.join(__dirname, '.spotify-tokens.json');
+    const CONFIG = require('./config');
+    const tokenFile = path.join(__dirname, CONFIG.TOKEN_FILE);
     
     if (fs.existsSync(tokenFile)) {
       fs.unlinkSync(tokenFile);
