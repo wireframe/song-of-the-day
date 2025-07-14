@@ -58,6 +58,15 @@ class SongFetcher {
         if (response.body.items.length < limit) break;
       }
     } catch (error) {
+      if (error.message.includes('access token expired')) {
+        console.log('🔄 Token expired, attempting refresh...');
+        const SpotifyAuth = require('./spotify-auth');
+        const auth = new SpotifyAuth();
+        if (await auth.refreshTokens()) {
+          console.log('✅ Token refreshed, retrying...');
+          return this.getSavedTracks();
+        }
+      }
       console.error('Error fetching saved tracks:', error.message);
     }
     
@@ -77,6 +86,15 @@ class SongFetcher {
         }
       }
     } catch (error) {
+      if (error.message.includes('access token expired')) {
+        console.log('🔄 Token expired, attempting refresh...');
+        const SpotifyAuth = require('./spotify-auth');
+        const auth = new SpotifyAuth();
+        if (await auth.refreshTokens()) {
+          console.log('✅ Token refreshed, retrying...');
+          return this.getPlaylistTracks();
+        }
+      }
       console.error('Error fetching playlist tracks:', error.message);
     }
     
