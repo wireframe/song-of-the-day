@@ -50,6 +50,14 @@ npm install -g .
 song-of-the-day
 ```
 
+### Development Setup (Optional)
+For local development, you can use `npm link` to create a symbolic link:
+```bash
+npm link
+song-of-the-day
+```
+This allows you to test changes without reinstalling the package globally.
+
 ## Features
 
 - **Random Selection**: Picks a random song from your Spotify library
