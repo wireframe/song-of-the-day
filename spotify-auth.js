@@ -88,7 +88,7 @@ class SpotifyAuth {
   }
 
   async performAuthFlow() {
-    const scopes = ['user-read-private', 'user-library-read', 'playlist-read-private'];
+    const scopes = ['user-read-private', 'user-library-read', 'playlist-read-private', 'user-follow-read'];
     const authorizeURL = this.spotifyApi.createAuthorizeURL(scopes);
     
     console.log('Please visit this URL to authorize the application:');

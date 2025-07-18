@@ -60,20 +60,32 @@ This allows you to test changes without reinstalling the package globally.
 
 ## Features
 
-- **Random Selection**: Picks a random song from your Spotify library
-- **History Tracking**: Avoids repeating recently played songs
-- **Multiple Sources**: Pulls from both saved tracks and your playlists
+- **Random Selection**: Picks a random song from your expanded Spotify library
+- **History Tracking**: Avoids repeating recently played songs (last 100 by default)
+- **Multiple Music Sources**: 
+  - 💖 **Saved Tracks**: Your "Liked Songs" library
+  - 📝 **User Playlists**: Songs from playlists you've created
+  - 💿 **Saved Albums**: All tracks from albums you've saved to your library
+  - 👥 **Followed Artists**: Top tracks from artists you follow
+- **Smart Deduplication**: Automatically removes duplicate songs across all sources
+- **Source Tracking**: Each song shows where it came from (saved/playlist/album/artist)
 - **Preview URLs**: Shows preview links when available
-- **CLI Interface**: Easy-to-use command line interface
+- **CLI Interface**: Easy-to-use command line interface with detailed progress feedback
 
 ## Authentication
 
-On first run, you'll be prompted to authenticate with Spotify. The app will:
-1. Open your browser to Spotify's authorization page
-2. After you authorize, it will redirect to a local callback
-3. Save your tokens for future use
+On first run, you'll be prompted to authenticate with Spotify. The app requires the following permissions:
+- `user-read-private` - Access your basic profile information
+- `user-library-read` - Access your saved tracks and albums
+- `playlist-read-private` - Access your private playlists
+- `user-follow-read` - Access artists you follow
 
-Tokens are automatically refreshed when they expire.
+The authentication flow:
+1. Opens your browser to Spotify's authorization page
+2. After you authorize, it redirects to a local callback
+3. Saves your tokens for future use
+
+Tokens are automatically refreshed when they expire. If you've used the app before, you'll need to re-authenticate to grant the new `user-follow-read` permission.
 
 ## File Structure
 
@@ -91,6 +103,7 @@ Tokens are automatically refreshed when they expire.
    - Weight by play count, recently added, or user preferences
    - Mood-based selection (happy, sad, energetic)
    - Genre-based filtering and selection
+   - Source-based weighting (prefer albums vs singles vs followed artists)
 
 2. **Enhanced History Management**
    - View detailed history with dates and ratings
@@ -106,7 +119,8 @@ Tokens are automatically refreshed when they expire.
 4. **User Preferences & Configuration**
    - Save preferred genres, artists, or time periods
    - Configure selection criteria (exclude explicit, minimum popularity)
-   - Custom weight settings for different sources
+   - Custom weight settings for different sources (saved tracks vs albums vs followed artists)
+   - Toggle sources on/off (disable followed artists, focus on saved albums, etc.)
 
 5. **Social Features**
    - Share today's song on social media
